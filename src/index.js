@@ -18,6 +18,13 @@ function lessLoader(source) {
     );
   }
 
+  const { modifyVarsParser, modifyVarsFile } = options;
+  if (modifyVarsFile && modifyVarsParser) {
+    options.modifyVars = require(options.modifyVarsParser).default(
+      modifyVarsFile
+    );
+  }
+
   processResult(loaderContext, render(source, options));
 }
 

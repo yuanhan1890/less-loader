@@ -7,13 +7,16 @@ const formatLessError = require('./formatLessError');
  * @param {loaderContext} loaderContext
  * @param {Promise<LessResult>} resultPromise
  */
-function processResult(loaderContext, resultPromise) {
+function processResult(loaderContext, resultPromise, options) {
   const { callback } = loaderContext;
 
   resultPromise
     .then(
       ({ css, map, imports }) => {
         imports.forEach(loaderContext.addDependency, loaderContext);
+        if (options.modifyVarsFile) {
+          loaderContext.addDependency(options.modifyVarsFile);
+        }
         return {
           // Removing the sourceMappingURL comment.
           // See removeSourceMappingUrl.js for the reasoning behind this.
